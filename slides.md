@@ -40,6 +40,13 @@ organizing data in a computer so that it can be used efficiently.
 </footer>
 </blockquote>
 
+# Examples
+
+* Array
+* Set
+* Queue
+* Map
+
 # Persistent Data Structures
 
 <blockquote>
