@@ -8,6 +8,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="reveal.js/css/reveal.css"/>
     <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+    </style>
+    <link rel="stylesheet" href="Font-Awesome/css/font-awesome.css"/>
     <link rel="stylesheet" href="css/slides.css"/>
     <link rel="stylesheet" href="reveal.js/css/theme/white.css"/>
   <link rel="stylesheet" media="print" href="reveal.js/css/print/pdf.css" />
@@ -70,14 +90,169 @@ In computer science, a data structure is a particular way of organizing data in 
 </blockquote>
 
 </section>
-<section id="examples" class="slide level1">
-<h1>Examples</h1>
+<section id="data-structure-examples" class="slide level1">
+<h1>Data Structure Examples</h1>
 <ul>
-<li>Array</li>
-<li>Set</li>
-<li>Queue</li>
-<li>Map</li>
+<li>Array (Vector)</li>
+<li>Map (Hash, Associative Array, Dictionary)</li>
+<li>Struct (Record, Tuple)</li>
 </ul>
+</section>
+<section id="efficiency" class="slide level1">
+<h1>Efficiency</h1>
+<blockquote>
+Efficiency is the extent to which time, effort, or cost is well-used for the intended task or function.
+<footer>
+– <cite><a href="http://en.wikipedia.org/wiki/Efficiency">Wikipedia: Efficiency</a></cite>
+</footer>
+</blockquote>
+
+</section>
+<section id="algorithmic-efficiency" class="slide level1">
+<h1>Algorithmic Efficiency</h1>
+<p>Primary resource concerns are:</p>
+<ul>
+<li>Space (~RAM)</li>
+<li>Time (~CPU)</li>
+</ul>
+</section>
+<section id="measurement" class="slide level1">
+<h1>Measurement</h1>
+<ul>
+<li>Theory: Big-O (and little o, and Ω…)</li>
+</ul>
+<blockquote>
+In theory, theory and practice are the same. In practice, they are not.
+</blockquote>
+
+<ul>
+<li>Practice: Benchmarking</li>
+</ul>
+<blockquote>
+Lies, Damn Lies, and <strike>Statistics</strike> Benchmarks.
+</blockquote>
+
+</section>
+<section id="a-little-about-big-o" class="slide level1">
+<h1>A little about Big-O</h1>
+<ul>
+<li>Commonly used terminology</li>
+<li>Order of magnitude of growth of upper bound</li>
+<li>Constant factors may be very large (or small!)</li>
+<li>Usually worst case, but sometimes average or amortized</li>
+</ul>
+</section>
+<section id="common-big-o-examples" class="slide level1">
+<h1>Common Big-O examples</h1>
+<dl>
+<dt>
+O(1)
+</dt><dd>
+Constant (array indexing)
+</dd>
+<dt>
+O(log n)
+</dt><dd>
+Logarithmic (binary search)
+</dd>
+<dt>
+O(n)
+</dt><dd>
+Linear (minimum element of an unsorted array)
+</dd>
+<dt>
+O(n log n)
+</dt><dd>
+Linearithmic (comparison sort)
+</dd>
+<dt>
+O(n²)
+</dt><dd>
+Quadratic (bubble sort)
+</dd>
+</dl>
+
+</section>
+<section id="less-often-measured" class="slide level1">
+<h1>Less often measured</h1>
+<ul>
+<li>Correctness</li>
+<li>Time travel (undo/redo)</li>
+<li>Concurrency</li>
+</ul>
+</section>
+<section id="correctness" class="slide level1">
+<h1>Correctness</h1>
+<ul>
+<li>Is it easy to use correctly?</li>
+<li>Does it cheaply enforce its invariants?</li>
+<li>Can it be used concurrently without locking?</li>
+</ul>
+</section>
+<section id="time-travel" class="slide level1">
+<h1>Time Travel</h1>
+<ul>
+<li>Is it cheap to make a snapshot?</li>
+<li>Can you safely work with that snapshot?</li>
+</ul>
+</section>
+<section id="concurrency" class="slide level1">
+<h1>Concurrency</h1>
+<ul>
+<li>Can this benefit from multiple cores?</li>
+<li>Do I need to worry about race conditions?</li>
+<li>Locking?</li>
+</ul>
+</section>
+<section id="is-there-a-solution" class="slide level1">
+<h1>Is there a solution?</h1>
+<ul>
+<li>Immutability</li>
+<li>Structural Sharing</li>
+</ul>
+</section>
+<section id="immutability" class="slide level1">
+<h1>Immutability</h1>
+<blockquote>
+In object-oriented and functional programming, an immutable object is an object whose state cannot be modified after it is created.
+<footer>
+– <cite><a href="http://en.wikipedia.org/wiki/Immutable_object">Wikipedia: Immutable object</a></cite>
+</footer>
+</blockquote>
+
+</section>
+<section id="cons" class="slide level1">
+<h1>Cons</h1>
+<ul>
+<li>Space</li>
+<li>Time</li>
+</ul>
+</section>
+<section id="how-does-that-even-work" class="slide level1">
+<h1>How does that even work?</h1>
+<ul>
+<li>Garbage collection can clean up old versions</li>
+<li>Structural sharing saves allocations</li>
+</ul>
+</section>
+<section id="mutating-an-array" class="slide level1">
+<h1>Mutating an array</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">zeroFirst</span>(arr) {
+  arr[<span class="dv">0</span>] = <span class="dv">0</span>;
+  <span class="kw">return</span> arr;
+}
+x = [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>];
+x1 = <span class="fu">zeroFirst</span>(x);</code></pre>
+</section>
+<section id="immutable" class="slide level1">
+<h1>Immutable</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">zeroFirst</span>(arr) {
+  arr1 = <span class="ot">arr</span>.<span class="fu">slice</span>(<span class="dv">0</span>, <span class="ot">x</span>.<span class="fu">length</span>);
+  arr1[<span class="dv">0</span>] = <span class="dv">0</span>;
+  <span class="kw">return</span> arr1;
+}
+x = [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>];
+x1 = <span class="fu">zeroFirst</span>(x);</code></pre>
 </section>
 <section id="persistent-data-structures" class="slide level1">
 <h1>Persistent Data Structures</h1>
@@ -89,6 +264,31 @@ a persistent data structure is a data structure that always preserves the previo
 </blockquote>
 
 <p><em>not</em> related to persistent storage, such as disk, this is a different and unrelated sense of the word &quot;persistent.&quot;</p>
+</section>
+<section id="optimizations" class="slide level1">
+<h1>Optimizations</h1>
+<ul>
+<li>Haskell ST</li>
+<li>Clojure transients</li>
+</ul>
+</section>
+<section id="other-resources" class="slide level1">
+<h1></h1>
+<h2 id="videos" class="left"><i class="fa fa-video-camera"></i>  Videos</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=I7IdS-PbEgI">Immutable Data and React</a></li>
+</ul>
+<h2 id="books" class="left"><i class="fa fa-book"></i>  Books</h2>
+<ul>
+<li><a href="http://www.amazon.com/gp/product/032157351X?tag=etrepum-20">Algorithms</a></li>
+<li><a href="http://www.amazon.com/gp/product/0262033844?tag=etrepum-20">Introduction to Algorithms</a></li>
+<li><a href="http://www.amazon.com/gp/product/0521663504?tag=etrepum-20">Purely Functional Data Structures</a></li>
+</ul>
+<h2 id="code" class="left"><i class="fa fa-code"></i>  Code</h2>
+<ul>
+<li>JS Libraries: <a href="http://facebook.github.io/immutable-js/">Immutable.js</a>, <a href="http://swannodette.github.io/mori/">Mori</a></li>
+<li>Languages: <a href="https://www.haskell.org/">Haskell</a>, <a href="http://erlang.org/">Erlang</a>, <a href="http://clojure.org/">Clojure</a></li>
+</ul>
 </section>
 <section id="thanks" class="slide level1">
 <h1>Thanks!</h1>

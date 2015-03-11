@@ -21,6 +21,7 @@ index.html: slides.md header.html default.revealjs Makefile | reveal.js/.gitigno
 	  --variable=transition:none \
 	  --variable=css:reveal.js/css/theme/white.css \
 	  --variable=css:css/slides.css \
+	  --variable=css:Font-Awesome/css/font-awesome.css \
 	  --from=markdown+definition_lists \
 	  --template default.revealjs \
 	  -o $@ \
