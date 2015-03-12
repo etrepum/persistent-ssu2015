@@ -151,7 +151,19 @@ x1 = incrementFirst(x);
 * Pros: Constant time and space
 * Cons: No persistence (original x is lost)
 
-# Immutable
+# Mutating an array
+
+<table class="array">
+<tbody><tr class="shared"><th>x</th><td>-1</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></tbody>
+</table>
+
+# Mutating an array
+
+<table class="array">
+<tbody><tr class="shared"><th>x1</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></tbody>
+</table>
+
+# Immutable array update
 
 ```javascript
 // Linear time + space
@@ -166,6 +178,20 @@ x1 = incrementFirst(x);
 
 * Pros: Persistence
 * Cons: Linear time and space is much worse
+
+# Immutable array update
+
+<table class="array">
+<tbody><tr class="shared"><th>x</th><td>-1</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></tbody>
+</table>
+
+# Immutable array update
+
+<table class="array">
+<tbody><tr class="shared"><th>x</th><td>-1</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></tbody>
+<tbody><tr class="shared"><th>x1</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></tbody>
+</table>
+
 
 # Persistent Data Structures
 

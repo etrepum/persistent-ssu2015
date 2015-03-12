@@ -242,8 +242,46 @@ x1 = <span class="fu">incrementFirst</span>(x);</code></pre>
 <li>Cons: No persistence (original x is lost)</li>
 </ul>
 </section>
-<section id="immutable" class="slide level1">
-<h1>Immutable</h1>
+<section id="mutating-an-array-1" class="slide level1">
+<h1>Mutating an array</h1>
+<table class="array">
+<tbody><tr class="shared"><th>
+x
+</th><td>
+-1
+</td><td>
+1
+</td><td>
+2
+</td><td>
+3
+</td><td>
+4
+</td></tr></tbody>
+</table>
+
+</section>
+<section id="mutating-an-array-2" class="slide level1">
+<h1>Mutating an array</h1>
+<table class="array">
+<tbody><tr class="shared"><th>
+x1
+</th><td>
+0
+</td><td>
+1
+</td><td>
+2
+</td><td>
+3
+</td><td>
+4
+</td></tr></tbody>
+</table>
+
+</section>
+<section id="immutable-array-update" class="slide level1">
+<h1>Immutable array update</h1>
 <pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="co">// Linear time + space</span>
 <span class="kw">function</span> <span class="fu">incrementFirst</span>(arr) {
   arr1 = <span class="ot">arr</span>.<span class="fu">slice</span>(<span class="dv">0</span>, <span class="ot">x</span>.<span class="fu">length</span>);
@@ -256,6 +294,58 @@ x1 = <span class="fu">incrementFirst</span>(x);</code></pre>
 <li>Pros: Persistence</li>
 <li>Cons: Linear time and space is much worse</li>
 </ul>
+</section>
+<section id="immutable-array-update-1" class="slide level1">
+<h1>Immutable array update</h1>
+<table class="array">
+<tbody><tr class="shared"><th>
+x
+</th><td>
+-1
+</td><td>
+1
+</td><td>
+2
+</td><td>
+3
+</td><td>
+4
+</td></tr></tbody>
+</table>
+
+</section>
+<section id="immutable-array-update-2" class="slide level1">
+<h1>Immutable array update</h1>
+<table class="array">
+<tbody><tr class="shared"><th>
+x
+</th><td>
+-1
+</td><td>
+1
+</td><td>
+2
+</td><td>
+3
+</td><td>
+4
+</td></tr></tbody>
+<tbody><tr class="shared"><th>
+x1
+</th><td>
+0
+</td><td>
+1
+</td><td>
+2
+</td><td>
+3
+</td><td>
+4
+</td></tr></tbody>
+</table>
+
+
 </section>
 <section id="persistent-data-structures" class="slide level1">
 <h1>Persistent Data Structures</h1>
