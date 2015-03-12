@@ -28,7 +28,7 @@ function Node(left, right) {
 }
 Node.prototype = _.assign(Node.prototype, {
   addToVis(nodes, edges, level, height) {
-    nodes.push({id: this.id, label: '', level});
+    nodes.push({id: this.id, label: '', level: height - this.height + 1});
     addToVis(this, this.left, nodes, edges, level, height);
     addToVis(this, this.right, nodes, edges, level, height);
   },
@@ -53,7 +53,10 @@ function Leaf(value) {
 }
 Leaf.prototype = _.assign(Leaf.prototype, {
   addToVis(nodes, edges, level, height) {
-    nodes.push({id: this.id, label: JSON.stringify(this.value), level: height});
+    nodes.push({
+      id: this.id,
+      label: JSON.stringify(this.value),
+      level: height - this.height + 1});
   },
   push(node, bits) {
     return new Node(this, node);
@@ -144,6 +147,9 @@ var TreeDemo = React.createClass({
         height: '550px',
         hierarchicalLayout: {
           layout: 'direction'
+        },
+        nodes: {
+          fontSize: 24
         },
         groups: {
           added: {
