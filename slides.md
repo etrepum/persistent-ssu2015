@@ -180,6 +180,23 @@ a persistent data structure is a data structure that always preserves the previo
 
 # Radix Trees
 
+* Commonly used persistent data structure
+* Can be used for Array-like use cases
+* Also called: Trie, Radix Trie, Prefix tree
+* More specifically we'll look at a Patricia Tree
+
+# Patricia Tree
+
+<blockquote>
+Compact representation of a trie in which any node that is an only child
+is merged with its parent.
+<footer>
+– <cite>[DADS: Patricia tree]</cite>
+</footer>
+</blockquote>
+
+# Radix Trees
+
 ```javascript
 function RadixTree(size, rootNode) {
   this.size = size;
@@ -394,3 +411,4 @@ var five = new RadixTree(5,
 [Erlang]: http://erlang.org/
 [Clojure]: http://clojure.org/
 [Mori]: http://swannodette.github.io/mori/
+[DADS: Patricia tree]: http://xlinux.nist.gov/dads/HTML/patriciatree.html
