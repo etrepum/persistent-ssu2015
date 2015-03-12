@@ -104,7 +104,7 @@ Lies, Damn Lies, and <strike>Statistics</strike> Benchmarks.
 
 * Is it easy to use correctly?
 * Does it cheaply enforce its invariants?
-* Can it be used concurrently without locking?
+* Can I use it in a referentially transparent manner?
 
 # Time Travel
 
@@ -115,7 +115,7 @@ Lies, Damn Lies, and <strike>Statistics</strike> Benchmarks.
 
 * Can this benefit from multiple cores?
 * Do I need to worry about race conditions?
-* Locking?
+* Do I need to use locks?
 
 # Is there a solution?
 
@@ -144,25 +144,32 @@ In object-oriented and functional programming, an immutable object is an object 
 # Mutating an array
 
 ```javascript
-function zeroFirst(arr) {
-  arr[0] = 0;
+function incrementFirst(arr) {
+  arr[0] = arr[0] + 1;
   return arr;
 }
-x = [1, 1, 2, 3, 4];
-x1 = zeroFirst(x);
+x = [-1, 1, 2, 3, 4];
+x1 = incrementFirst(x);
 ```
+
+* Pros: Constant time and space
+* Cons: No persistence (original x is lost)
 
 # Immutable
 
 ```javascript
-function zeroFirst(arr) {
+// Linear time + space
+function incrementFirst(arr) {
   arr1 = arr.slice(0, x.length);
-  arr1[0] = 0;
+  arr1[0] = arr[0] + 1;
   return arr1;
 }
-x = [1, 1, 2, 3, 4];
-x1 = zeroFirst(x);
+x = [-1, 1, 2, 3, 4];
+x1 = incrementFirst(x);
 ```
+
+* Pros: Persistence
+* Cons: Linear time and space is much worse
 
 # Persistent Data Structures
 
@@ -174,6 +181,155 @@ a persistent data structure is a data structure that always preserves the previo
 </blockquote>
 
 *not* related to persistent storage, such as disk, this is a different and unrelated sense of the word "persistent."
+
+# Radix Trees
+
+```javascript
+function RadixTree(size, rootNode) {
+  this.size = size;
+  this.rootNode = rootNode;
+}
+function Node(left, right) {
+  this.left = left;
+  this.right = right;
+}
+function Leaf(value) {
+  this.value = value;
+}
+```
+
+# Small Trees
+
+```javascript
+var zero = new RadixTree(0,
+  null);
+```
+
+# Small Trees
+
+```javascript
+var one = new RadixTree(1,
+  new Leaf('a'));
+```
+
+# Small Trees
+
+```javascript
+var two = new RadixTree(2,
+  new Node(
+    new Leaf('a'),
+    new Leaf('b')));
+```
+
+# Bigger Trees
+
+```javascript
+var three = new RadixTree(3,
+  new Node(
+    new Node(
+      new Leaf('a'),
+      new Leaf('b')),
+    new Leaf('c')));
+```
+
+# Bigger Trees
+
+```javascript
+var four = new RadixTree(4,
+  new Node(
+    new Node(
+      new Leaf('a'),
+      new Leaf('b')),
+    new Node(
+      new Leaf('c'),
+      new Leaf('d'))));
+```
+
+# Bigger Trees
+
+```javascript
+var five = new RadixTree(5,
+  new Node(
+    new Node(
+      new Node(
+        new Leaf('a'),
+        new Leaf('b')),
+      new Node(
+        new Leaf('c'),
+        new Leaf('d'))),
+    new Leaf('e')));
+```
+
+# Structural Sharing
+
+* Most of the structure is the same
+* Since it is immutable, we do not need to copy
+* Let's see that again, without the shared structure
+
+# Small Trees
+
+```javascript
+var zero = new RadixTree(0,
+  null);
+```
+
+# Small Trees
+
+```javascript
+var one = new RadixTree(1,
+  new Leaf('a'));
+```
+
+# Small Trees
+
+```javascript
+var two = new RadixTree(2,
+  new Node(
+    …,
+    new Leaf('b')));
+```
+
+# Bigger Trees
+
+```javascript
+var three = new RadixTree(3,
+  new Node(
+    …,
+    new Leaf('c')));
+```
+
+# Bigger Trees
+
+```javascript
+var four = new RadixTree(4,
+  new Node(
+    …,
+    new Node(
+      …,
+      new Leaf('d'))));
+```
+
+# Bigger Trees
+
+```javascript
+var five = new RadixTree(5,
+  new Node(
+    …,
+    new Leaf('e')));
+```
+
+# Tree Demo
+
+# Radix Tree properties
+
+* Logarithmic time indexing (worse)
+* Logarithmic time update (better)
+
+# Practical concerns
+
+* Can use much higher branching factor for near-constant timing
+* Efficient to implement with power of 2 branching
+* 32 is a common branching factor, much better than 2
 
 # Optimizations
 

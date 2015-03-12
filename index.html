@@ -7,7 +7,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="reveal.js/css/reveal.css"/>
-    <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="vendor/vis-3.11.0/vis.css" />
     <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -28,7 +29,6 @@ code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
     </style>
     <link rel="stylesheet" href="vendor/font-awesome-4.3.0/css/font-awesome.css"/>
-    <link rel="stylesheet" href="css/slides.css"/>
     <link rel="stylesheet" href="reveal.js/css/theme/white.css"/>
   <link rel="stylesheet" media="print" href="reveal.js/css/print/pdf.css" />
   <!--[if lt IE 9]>
@@ -186,7 +186,7 @@ Quadratic (bubble sort)
 <ul>
 <li>Is it easy to use correctly?</li>
 <li>Does it cheaply enforce its invariants?</li>
-<li>Can it be used concurrently without locking?</li>
+<li>Can I use it in a referentially transparent manner?</li>
 </ul>
 </section>
 <section id="time-travel" class="slide level1">
@@ -201,7 +201,7 @@ Quadratic (bubble sort)
 <ul>
 <li>Can this benefit from multiple cores?</li>
 <li>Do I need to worry about race conditions?</li>
-<li>Locking?</li>
+<li>Do I need to use locks?</li>
 </ul>
 </section>
 <section id="is-there-a-solution" class="slide level1">
@@ -237,22 +237,31 @@ In object-oriented and functional programming, an immutable object is an object 
 </section>
 <section id="mutating-an-array" class="slide level1">
 <h1>Mutating an array</h1>
-<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">zeroFirst</span>(arr) {
-  arr[<span class="dv">0</span>] = <span class="dv">0</span>;
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">incrementFirst</span>(arr) {
+  arr[<span class="dv">0</span>] = arr[<span class="dv">0</span>] + <span class="dv">1</span>;
   <span class="kw">return</span> arr;
 }
-x = [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>];
-x1 = <span class="fu">zeroFirst</span>(x);</code></pre>
+x = [-<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>];
+x1 = <span class="fu">incrementFirst</span>(x);</code></pre>
+<ul>
+<li>Pros: Constant time and space</li>
+<li>Cons: No persistence (original x is lost)</li>
+</ul>
 </section>
 <section id="immutable" class="slide level1">
 <h1>Immutable</h1>
-<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">zeroFirst</span>(arr) {
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="co">// Linear time + space</span>
+<span class="kw">function</span> <span class="fu">incrementFirst</span>(arr) {
   arr1 = <span class="ot">arr</span>.<span class="fu">slice</span>(<span class="dv">0</span>, <span class="ot">x</span>.<span class="fu">length</span>);
-  arr1[<span class="dv">0</span>] = <span class="dv">0</span>;
+  arr1[<span class="dv">0</span>] = arr[<span class="dv">0</span>] + <span class="dv">1</span>;
   <span class="kw">return</span> arr1;
 }
-x = [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>];
-x1 = <span class="fu">zeroFirst</span>(x);</code></pre>
+x = [-<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>];
+x1 = <span class="fu">incrementFirst</span>(x);</code></pre>
+<ul>
+<li>Pros: Persistence</li>
+<li>Cons: Linear time and space is much worse</li>
+</ul>
 </section>
 <section id="persistent-data-structures" class="slide level1">
 <h1>Persistent Data Structures</h1>
@@ -264,6 +273,136 @@ a persistent data structure is a data structure that always preserves the previo
 </blockquote>
 
 <p><em>not</em> related to persistent storage, such as disk, this is a different and unrelated sense of the word &quot;persistent.&quot;</p>
+</section>
+<section id="radix-trees" class="slide level1">
+<h1>Radix Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">RadixTree</span>(size, rootNode) {
+  <span class="kw">this</span>.<span class="fu">size</span> = size;
+  <span class="kw">this</span>.<span class="fu">rootNode</span> = rootNode;
+}
+<span class="kw">function</span> <span class="fu">Node</span>(left, right) {
+  <span class="kw">this</span>.<span class="fu">left</span> = left;
+  <span class="kw">this</span>.<span class="fu">right</span> = right;
+}
+<span class="kw">function</span> <span class="fu">Leaf</span>(value) {
+  <span class="kw">this</span>.<span class="fu">value</span> = value;
+}</code></pre>
+</section>
+<section id="small-trees" class="slide level1">
+<h1>Small Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> zero = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">0</span>,
+  <span class="kw">null</span>);</code></pre>
+</section>
+<section id="small-trees-1" class="slide level1">
+<h1>Small Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> one = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">1</span>,
+  <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;a&#39;</span>));</code></pre>
+</section>
+<section id="small-trees-2" class="slide level1">
+<h1>Small Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> two = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">2</span>,
+  <span class="kw">new</span> <span class="fu">Node</span>(
+    <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;a&#39;</span>),
+    <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;b&#39;</span>)));</code></pre>
+</section>
+<section id="bigger-trees" class="slide level1">
+<h1>Bigger Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> three = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">3</span>,
+  <span class="kw">new</span> <span class="fu">Node</span>(
+    <span class="kw">new</span> <span class="fu">Node</span>(
+      <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;a&#39;</span>),
+      <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;b&#39;</span>)),
+    <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;c&#39;</span>)));</code></pre>
+</section>
+<section id="bigger-trees-1" class="slide level1">
+<h1>Bigger Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> four = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">4</span>,
+  <span class="kw">new</span> <span class="fu">Node</span>(
+    <span class="kw">new</span> <span class="fu">Node</span>(
+      <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;a&#39;</span>),
+      <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;b&#39;</span>)),
+    <span class="kw">new</span> <span class="fu">Node</span>(
+      <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;c&#39;</span>),
+      <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;d&#39;</span>))));</code></pre>
+</section>
+<section id="bigger-trees-2" class="slide level1">
+<h1>Bigger Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> five = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">5</span>,
+  <span class="kw">new</span> <span class="fu">Node</span>(
+    <span class="kw">new</span> <span class="fu">Node</span>(
+      <span class="kw">new</span> <span class="fu">Node</span>(
+        <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;a&#39;</span>),
+        <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;b&#39;</span>)),
+      <span class="kw">new</span> <span class="fu">Node</span>(
+        <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;c&#39;</span>),
+        <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;d&#39;</span>))),
+    <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;e&#39;</span>)));</code></pre>
+</section>
+<section id="structural-sharing" class="slide level1">
+<h1>Structural Sharing</h1>
+<ul>
+<li>Most of the structure is the same</li>
+<li>Since it is immutable, we do not need to copy</li>
+<li>Let's see that again, without the shared structure</li>
+</ul>
+</section>
+<section id="small-trees-3" class="slide level1">
+<h1>Small Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> zero = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">0</span>,
+  <span class="kw">null</span>);</code></pre>
+</section>
+<section id="small-trees-4" class="slide level1">
+<h1>Small Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> one = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">1</span>,
+  <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;a&#39;</span>));</code></pre>
+</section>
+<section id="small-trees-5" class="slide level1">
+<h1>Small Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> two = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">2</span>,
+  <span class="kw">new</span> <span class="fu">Node</span>(
+    …,
+    <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;b&#39;</span>)));</code></pre>
+</section>
+<section id="bigger-trees-3" class="slide level1">
+<h1>Bigger Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> three = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">3</span>,
+  <span class="kw">new</span> <span class="fu">Node</span>(
+    …,
+    <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;c&#39;</span>)));</code></pre>
+</section>
+<section id="bigger-trees-4" class="slide level1">
+<h1>Bigger Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> four = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">4</span>,
+  <span class="kw">new</span> <span class="fu">Node</span>(
+    …,
+    <span class="kw">new</span> <span class="fu">Node</span>(
+      …,
+      <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;d&#39;</span>))));</code></pre>
+</section>
+<section id="bigger-trees-5" class="slide level1">
+<h1>Bigger Trees</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> five = <span class="kw">new</span> <span class="fu">RadixTree</span>(<span class="dv">5</span>,
+  <span class="kw">new</span> <span class="fu">Node</span>(
+    …,
+    <span class="kw">new</span> <span class="fu">Leaf</span>(<span class="st">&#39;e&#39;</span>)));</code></pre>
+</section>
+<section id="tree-demo" class="slide level1">
+<h1>Tree Demo</h1>
+</section>
+<section id="radix-tree-properties" class="slide level1">
+<h1>Radix Tree properties</h1>
+<ul>
+<li>Logarithmic time indexing (worse)</li>
+<li>Logarithmic time update (better)</li>
+</ul>
+</section>
+<section id="practical-concerns" class="slide level1">
+<h1>Practical concerns</h1>
+<ul>
+<li>Can use much higher branching factor for near-constant timing</li>
+<li>Efficient to implement with power of 2 branching</li>
+<li>32 is a common branching factor, much better than 2</li>
+</ul>
 </section>
 <section id="optimizations" class="slide level1">
 <h1>Optimizations</h1>
@@ -343,6 +482,13 @@ a persistent data structure is a data structure that always preserves the previo
 //          { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
 ]});
     </script>
+<script src="vendor/jquery-1.11.2.js"></script>
+<script src="vendor/vis-3.11.0/vis.js"></script>
+<script src="vendor/react-0.13.0/react-with-addons.js"></script>
+<script src="vendor/react-0.13.0/JSXTransformer.js"></script>
+<script src="vendor/lodash-3.5.0.js"></script>
+<script src="vendor/immutable-js-3.6.4/immutable.js"></script>
+<script src="code.jsx" type="text/jsx;harmony=true"></script>
 <script>
   var p = window.location.protocol;
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
