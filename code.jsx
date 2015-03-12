@@ -113,6 +113,7 @@ var TreeDemo = React.createClass({
   addNode() {
     var {trees} = this.state;
     var tree = trees.last();
+    // need to fix this bug :(
     if (tree.size < 11) {
       this.setState({trees: trees.push(tree.push(tree.size))});
     }

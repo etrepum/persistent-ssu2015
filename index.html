@@ -226,13 +226,7 @@ In object-oriented and functional programming, an immutable object is an object 
 <ul>
 <li>Space</li>
 <li>Time</li>
-</ul>
-</section>
-<section id="how-does-that-even-work" class="slide level1">
-<h1>How does that even work?</h1>
-<ul>
-<li>Garbage collection can clean up old versions</li>
-<li>Structural sharing saves allocations</li>
+<li>No more in-place updates</li>
 </ul>
 </section>
 <section id="mutating-an-array" class="slide level1">
@@ -396,6 +390,21 @@ a persistent data structure is a data structure that always preserves the previo
 <li>Logarithmic time update (better)</li>
 </ul>
 </section>
+<section id="how-does-that-even-work" class="slide level1">
+<h1>How does that even work?</h1>
+<ul>
+<li>Garbage collection can clean up old versions</li>
+<li>Structural sharing saves allocations</li>
+</ul>
+</section>
+<section id="why-isnt-this-pervasive" class="slide level1">
+<h1>Why isn't this pervasive?</h1>
+<ul>
+<li>Multi-core is a relatively new concern</li>
+<li>(Good) Garbage collection is relatively new</li>
+<li>The constant or log factors were more of a concern with older generations of hardware</li>
+</ul>
+</section>
 <section id="practical-concerns" class="slide level1">
 <h1>Practical concerns</h1>
 <ul>
@@ -404,11 +413,21 @@ a persistent data structure is a data structure that always preserves the previo
 <li>32 is a common branching factor, much better than 2</li>
 </ul>
 </section>
-<section id="optimizations" class="slide level1">
-<h1>Optimizations</h1>
+<section id="implementing-undo" class="slide level1">
+<h1>Implementing Undo</h1>
 <ul>
-<li>Haskell ST</li>
-<li>Clojure transients</li>
+<li>Just keep a list or tree of all past states!</li>
+<li>Structure sharing makes this cheap (logarithmic, not linear)</li>
+<li>No need to write reversible actions, roll back the world</li>
+</ul>
+</section>
+<section id="more-optimizations" class="slide level1">
+<h1>More Optimizations</h1>
+<ul>
+<li>Use object identity to check for differences in constant time</li>
+<li>Haskell ST - strict state-transformer, allows for safe and isolated in-place updates</li>
+<li>Clojure transients - temporary mutable interface to a persistent structure</li>
+<li>Immutable.js - withMutations</li>
 </ul>
 </section>
 <section id="other-resources" class="slide level1">

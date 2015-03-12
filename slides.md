@@ -135,11 +135,7 @@ In object-oriented and functional programming, an immutable object is an object 
 
 * Space
 * Time
-
-# How does that even work?
-
-* Garbage collection can clean up old versions
-* Structural sharing saves allocations
+* No more in-place updates
 
 # Mutating an array
 
@@ -325,16 +321,36 @@ var five = new RadixTree(5,
 * Logarithmic time indexing (worse)
 * Logarithmic time update (better)
 
+# How does that even work?
+
+* Garbage collection can clean up old versions
+* Structural sharing saves allocations
+
+# Why isn't this pervasive?
+
+* Multi-core is a relatively new concern
+* (Good) Garbage collection is relatively new
+* The constant or log factors were more of a concern with older
+  generations of hardware
+
 # Practical concerns
 
 * Can use much higher branching factor for near-constant timing
 * Efficient to implement with power of 2 branching
 * 32 is a common branching factor, much better than 2
 
-# Optimizations
+# Implementing Undo
 
-* Haskell ST
-* Clojure transients
+* Just keep a list or tree of all past states!
+* Structure sharing makes this cheap (logarithmic, not linear)
+* No need to write reversible actions, roll back the world
+
+# More Optimizations
+
+* Use object identity to check for differences in constant time
+* Haskell ST - strict state-transformer, allows for safe and isolated in-place updates
+* Clojure transients - temporary mutable interface to a persistent structure
+* Immutable.js - withMutations
 
 # {#other-resources}
 
