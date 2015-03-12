@@ -25,6 +25,7 @@ function Node(left, right) {
   this.left = left;
   this.right = right;
   this.height = 1 + Math.max(left.height, right.height);
+  this.size = 1 + left.size + right.size;
 }
 Node.prototype = _.assign(Node.prototype, {
   addToVis(nodes, edges, level, height) {
@@ -33,9 +34,13 @@ Node.prototype = _.assign(Node.prototype, {
     addToVis(this, this.right, nodes, edges, level, height);
   },
   push(node, bits) {
-    if (bits.size >= this.height) {
+    var room = (1 << this.height) - this.size - 1;
+    if (room <= 0) {
       return new Node(this, node);
     } else {
+      while (bits.size >= this.height) {
+        bits = bits.pop();
+      }
       return bits.first()
         ? new Node(this.left, this.right.push(node, bits.shift()))
         : new Node(this.left.push(node, bits.shift()), this.right);
@@ -50,6 +55,7 @@ function Leaf(value) {
   this.id = makeId();
   this.value = value;
   this.height = 1;
+  this.size = 1;
 }
 Leaf.prototype = _.assign(Leaf.prototype, {
   addToVis(nodes, edges, level, height) {
@@ -116,10 +122,7 @@ var TreeDemo = React.createClass({
   addNode() {
     var {trees} = this.state;
     var tree = trees.last();
-    // need to fix this bug :(
-    if (tree.size < 11) {
-      this.setState({trees: trees.push(tree.push(tree.size))});
-    }
+    this.setState({trees: trees.push(tree.push(tree.size))});
   },
   reconcile(prevState) {
     if (this.network) {
@@ -170,7 +173,15 @@ var TreeDemo = React.createClass({
   },
   handleClick(e) {
     e.preventDefault();
-    this.addNode();
+    if (e.shiftKey) {
+      var {trees} = this.state;
+      if (trees.size > 1) {
+        trees = trees.pop();
+      }
+      this.setState({trees});
+    } else {
+      this.addNode();
+    }
   },
   componentDidMount() {
     this.getDOMNode().addEventListener('click', this.handleClick);
